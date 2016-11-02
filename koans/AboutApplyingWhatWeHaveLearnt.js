@@ -82,16 +82,29 @@ describe("About Applying What We Have Learnt", function() {
             ingredientCount[products[i].ingredients[j]] = (ingredientCount[products[i].ingredients[j]] || 0) + 1;
         }
     }
-
+    console.log(ingredientCount);
     expect(ingredientCount['mushrooms']).toBe(2);
   });
+
+  /* chain() together map(), flatten() and reduce() */
 
   it("should count the ingredient occurrence (functional)", function () {
     var ingredientCount = { "{ingredient name}": 0 };
 
-    /* chain() together map(), flatten() and reduce() */
+    var ingredientCounts = _(products).chain()
+      .map(function(x) { console.log(x.ingredients); return x.ingredients; })
+      .flatten()
+      .reduce(function (obj, ingredientName) {
+        if (obj[ingredientName]) {
+           obj[ingredientName]++
+         } else {
+           obj[ingredientName] = 1;
+         }
+         return obj;
+        }, ingredientCount)
+        .value();
 
-    expect(ingredientCount['mushrooms']).toBe(undefined);
+    expect(ingredientCount['mushrooms']).toBe(ingredientCounts.mushrooms);
   });
 
   /*********************************************************************************/
